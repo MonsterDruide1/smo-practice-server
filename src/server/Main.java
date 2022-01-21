@@ -61,6 +61,7 @@ public class Main {
 			try {
 				OutPacket[] packet = parse(line);
 				server.sendPackets(packet);
+				System.out.println("Sent!");
 			} catch(ParseException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
@@ -124,6 +125,10 @@ public class Main {
 			} catch (NumberFormatException e) {
 				throw new ParseException(e);
 			}
+		}
+		case "help" -> {
+			System.out.println("available commands: tp, go, script, page");
+			yield null;
 		}
 		case "exit", "quit" -> {
 			System.exit(0);
