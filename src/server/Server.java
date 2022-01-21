@@ -28,6 +28,7 @@ public class Server {
 	
 	public void startLoop() {
 		try {
+			System.out.println("Server started.");
 			while(true) {
 				receiveLoop();
 			}

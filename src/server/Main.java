@@ -1,9 +1,13 @@
 package server;
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 import in.ParseException;
 import out.ChangePage;
@@ -16,7 +20,19 @@ public class Main {
 	
 	public static Server server;
 	
-	public static void main(String[] args) throws SocketException {
+	public static void main(String[] args) throws IOException {
+		// requires a VM argument to be set: `inIDE` can have any contents, but it has to exist when running from an IDE.
+		// in eclipse, this can be added in the run config, below `VM arguments`: `-DinIDE=true` will work.
+        if(System.console() == null && !GraphicsEnvironment.isHeadless() && System.getProperty("inIDE") == null){
+        	JOptionPane.showMessageDialog(null, "This should only be run from the command line to avoid blocking ports!\n"
+        			+ "Please run this file using `java -jar [NAME].jar`.", "Run from terminal", JOptionPane.ERROR_MESSAGE, null);
+        }
+        else {
+            bootup();
+        }
+	}
+	
+	public static void bootup() throws SocketException {
 		server = new Server(7901, 7902);
 		server.startLoopThread();
 		new Main().startLoop();
