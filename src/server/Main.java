@@ -118,7 +118,7 @@ public class Main {
 		}
 		case "page" -> {
 			if(parts.length != 2)
-				throw new ParseException("1 argument has to be supplied. Usage: script <file>");
+				throw new ParseException("1 argument has to be supplied. Usage: page <index>");
 			
 			try {
 				yield new OutPacket[]{new ChangePage(Byte.parseByte(parts[1]))};
