@@ -17,7 +17,7 @@ public class Script {
 		Vector2f lStick, rStick;
 		boolean a, b, x, y, l, r, zl, zr, plus, minus, triggerLStick, triggerRStick, dUp, dRight, dDown, dLeft;
 		
-		private Frame() {}
+		private Frame() {lStick = rStick = new Vector2f(0, 0);}
 		public static Frame EMPTY = new Frame();
 		
 		public Frame(String[] parts) { //ignore first, as it's the line number
@@ -73,6 +73,7 @@ public class Script {
 		frames = new ArrayList<>();
 		
 		for(String line : data) {
+			if(line.isBlank()) continue;
 			String[] parts = line.split(" ");
 			int frameNo = Integer.parseInt(parts[0]);
 			while(frameNo > frames.size()) {
