@@ -39,8 +39,12 @@ public class Server {
 			
 			socket.close();
 		} catch(IOException e) {
-			e.printStackTrace();
-			System.err.println("Server crashed.");
+			if(!keepRunning) { // expected "crash" as shutdown
+				System.out.println("Server stopped.");
+			} else {
+				System.err.println("Server crashed.");
+				e.printStackTrace();
+			}
 		}
 	}
 	
