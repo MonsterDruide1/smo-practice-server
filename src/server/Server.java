@@ -17,25 +17,36 @@ public class Server {
 	DatagramSocket socket; //server
 	InetAddress client; //instance of SMO
 	
+	private volatile boolean keepRunning = true;
+	
 	public Server(int clientPort, int serverPort) throws SocketException {
 		socket = new DatagramSocket(serverPort);
 		this.clientPort = clientPort;
 	}
 	
-	public void startLoopThread() {
-		new Thread(() -> startLoop()).start();
+	public Thread startLoopThread() {
+		Thread thread = new Thread(() -> startLoop());
+		thread.start();
+		return thread;
 	}
 	
 	public void startLoop() {
 		try {
 			System.out.println("Server started.");
-			while(true) {
+			while(keepRunning) {
 				receiveLoop();
 			}
+			
+			socket.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.err.println("Server crashed.");
 		}
+	}
+	
+	public void stopLoopThread() {
+		keepRunning = false;
+		socket.close();
 	}
 	
 	private void receiveLoop() throws IOException {
