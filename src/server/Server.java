@@ -36,8 +36,6 @@ public class Server {
 			while(keepRunning) {
 				receiveLoop();
 			}
-			
-			socket.close();
 		} catch(IOException e) {
 			if(!keepRunning) { // expected "crash" as shutdown
 				System.out.println("Server stopped.");
@@ -46,10 +44,13 @@ public class Server {
 				e.printStackTrace();
 			}
 		}
+		
+		stopLoopThread();
 	}
 	
 	public void stopLoopThread() {
 		keepRunning = false;
+		client = null;
 		socket.close();
 	}
 	
@@ -85,13 +86,18 @@ public class Server {
 	}
 	
 	private void sendData(byte[] data) throws IOException {
-		if(client == null) throw new IllegalStateException("No client currently connected");
+		if(!isClientConnected()) throw new IllegalStateException("No client currently connected");
+		
 		DatagramPacket packet = new DatagramPacket(data, data.length, client, clientPort);
 		socket.send(packet);
 		
 		/*for(byte b : data)
 			System.out.print((b&0xff)+",");
 		System.out.println();*/
+	}
+	
+	public boolean isClientConnected() {
+		return client != null;
 	}
 	
 }
