@@ -33,6 +33,9 @@ public class Util {
 	public static OutPacket[] sendScript(File file, String name) throws IOException {
 		return sendScript(new Script(file), name);
 	}
+	public static OutPacket[] sendScript(String script, String name) throws IOException {
+		return sendScript(new Script(script), name);
+	}
 	public static OutPacket[] sendScript(Script script, String name) throws IOException {
 		System.out.println("Loading script "+name+" of "+script.frames.size()+" frames");
 		ArrayList<OutPacket> packets = new ArrayList<>();
