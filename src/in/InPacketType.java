@@ -6,7 +6,7 @@ public enum InPacketType {
 	
 	DummyInit(-1, null),
 	Init(-2, Init::new),
-	Log(-3, null);
+	Log(-3, Log::new);
 	
 	private byte id;
 	private Function<byte[], InPacket> constructor;

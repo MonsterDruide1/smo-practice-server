@@ -72,6 +72,9 @@ public class Server {
 		if(packet instanceof Init) {
 			client = datagramPacket.getAddress();
 			System.out.println("Client connected from "+client.getHostAddress());
+		} else if(packet instanceof Log) {
+			Log log = (Log) packet;
+			System.out.println("["+log.getLogType().toString()+"]: "+log.getMessage());
 		}
 	}
 	
