@@ -20,7 +20,7 @@ public class Server {
 	
 	private volatile boolean keepRunning;
 	
-	public Server(int clientPort, int serverPort) throws SocketException {
+	public Server(int clientPort, int serverPort) {
 		this.clientPort = clientPort;
 		this.serverPort = serverPort;
 	}
