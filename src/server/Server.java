@@ -8,29 +8,40 @@ import java.net.SocketException;
 
 import in.InPacket;
 import in.Init;
+import in.Log;
 import in.ParseException;
 import out.OutPacket;
 
 public class Server {
 
-	int clientPort;
+	int clientPort, serverPort;
 	DatagramSocket socket; //server
 	InetAddress client; //instance of SMO
 	
-	private volatile boolean keepRunning = true;
+	private volatile boolean keepRunning;
 	
 	public Server(int clientPort, int serverPort) throws SocketException {
-		socket = new DatagramSocket(serverPort);
 		this.clientPort = clientPort;
+		this.serverPort = serverPort;
 	}
 	
 	public Thread startLoopThread() {
-		Thread thread = new Thread(() -> startLoop());
+		Thread thread = new Thread(() -> {
+			try {
+				startLoop();
+			} catch (SocketException e) {
+				System.err.println("Unable to start server:");
+				e.printStackTrace();
+			}
+		});
 		thread.start();
 		return thread;
 	}
 	
-	public void startLoop() {
+	public void startLoop() throws SocketException {
+		socket = new DatagramSocket(serverPort);
+		keepRunning = true;
+		
 		try {
 			System.out.println("Server started.");
 			while(keepRunning) {
@@ -52,6 +63,7 @@ public class Server {
 		keepRunning = false;
 		client = null;
 		socket.close();
+		socket = null;
 	}
 	
 	private void receiveLoop() throws IOException {
