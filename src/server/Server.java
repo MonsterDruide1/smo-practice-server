@@ -59,10 +59,12 @@ public class Server {
 		stopLoopThread();
 	}
 	
+	// might be executed twice - manually, then from above (end of startLoop)
 	public void stopLoopThread() {
 		keepRunning = false;
 		client = null;
-		socket.close();
+		if(socket != null)
+			socket.close();
 		socket = null;
 	}
 	
