@@ -89,6 +89,8 @@ public class Server {
 		} else if(packet instanceof Log) {
 			Log log = (Log) packet;
 			System.out.println("["+log.getLogType().toString()+"]: "+log.getMessage());
+		} else {
+			System.err.println("Unhandled packet type: "+packet.getClass().getName());
 		}
 	}
 	
