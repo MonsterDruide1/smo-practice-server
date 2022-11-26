@@ -60,6 +60,9 @@ public class Main {
 		while ((line = console.nextLine()) != null) {
 			try {
 				OutPacket[] packet = parse(line);
+				if(packet == null) { //ignored, probably "help" command
+					continue;
+				}
 				server.sendPackets(packet);
 				System.out.println("Sent!");
 			} catch(ParseException e) {
