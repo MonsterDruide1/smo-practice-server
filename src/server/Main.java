@@ -67,7 +67,7 @@ public class Main {
 				System.out.println("Sent!");
 			} catch(ParseException e) {
 				e.printStackTrace();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
