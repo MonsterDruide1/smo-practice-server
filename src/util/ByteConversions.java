@@ -77,5 +77,21 @@ public class ByteConversions {
 	        return Arrays.copyOf(bytes, bools.length / 8 + (bools.length % 8 == 0 ? 0 : 1));
 	    }
 	}
+	
+	public static int toInt(byte[] data, ByteOrder order) {
+		if(order.equals(ByteOrder.BIG_ENDIAN)) {
+		    return
+		            ((data[0] & 0xff) << 24) |
+		            ((data[1] & 0xff) << 16) |
+		            ((data[2] & 0xff) << 8) |
+		            (data[3] & 0xff);
+		} else {
+		    return
+		            ((int)data[0] & 0xff) |
+		            (((int)data[1] & 0xff) << 8) |
+		            (((int)data[2] & 0xff) << 16) |
+		            (((int)data[3] & 0xff) << 24);
+		}
+	}
 
 }
