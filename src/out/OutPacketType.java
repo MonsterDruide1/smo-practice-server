@@ -7,6 +7,8 @@ public enum OutPacketType {
 	PlayerTeleport(3),
 	PlayerGo(4),
 	ChangePage(5),
+	UINavigation(6),
+	PlayerScriptState(7),
 	;
 	
 	private byte id;

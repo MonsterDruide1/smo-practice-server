@@ -1,5 +1,5 @@
 # smo-practice-server
- This is a cross-platform Java server for the [practice mod](https://github.com/fruityloops1/smo-practice/) for Super Mario Odyssey, made by Fruityloops.
+ This is a cross-platform Java server for the [practice mod](https://github.com/MonsterDruide1/smo-practice/) for Super Mario Odyssey, made by Fruityloops.
  
  ## Commands
  ### tp &lt;x&gt; &lt;y&gt; &lt;z&gt;
@@ -21,8 +21,31 @@
  
  Example: `script script0-1.txt`
  
- ### page &lt;index&gt;
- Change to the specified page number, being 0-indexed.
+ ### select &lt;index&gt;
+ Go to the specified line of the current page, being 0-indexed.
  
- Example: `page 5` (switch to TAS information, 6/9)
+ Example: `select 5`
  
+ ### up
+ Emulate a D_UP press on the UI.
+
+ ### down
+ Emulate a D_DOWN press on the UI.
+
+ ### left
+ Emulate a D_LEFT press on the UI.
+
+ ### right
+ Emulate a D_RIGHT press on the UI.
+ 
+ ### start
+ Start playback of the currently loaded TAS file. Script has to be loaded using `script` beforehand, otherwise this command will be ignored.
+ 
+ ### stop
+ Stop playback, if a TAS script is currently running.
+
+ ### help
+ Show a list of available commands.
+ 
+ ### exit, quit
+ Stop the server and commmand line.

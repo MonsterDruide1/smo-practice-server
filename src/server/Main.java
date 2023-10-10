@@ -4,8 +4,12 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -13,7 +17,9 @@ import in.ParseException;
 import out.ChangePage;
 import out.OutPacket;
 import out.PlayerGo;
+import out.PlayerScriptState;
 import out.PlayerTeleport;
+import out.UINavigation;
 import util.Util;
 
 public class Main {
@@ -73,8 +79,28 @@ public class Main {
 		}
 	}
 	
+	// https://stackoverflow.com/a/366532/9275661
+	public static String[] getParts(String command) {
+		List<String> matchList = new ArrayList<String>();
+		Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
+		Matcher regexMatcher = regex.matcher(command);
+		while (regexMatcher.find()) {
+		    if (regexMatcher.group(1) != null) {
+		        // Add double-quoted string without the quotes
+		        matchList.add(regexMatcher.group(1));
+		    } else if (regexMatcher.group(2) != null) {
+		        // Add single-quoted string without the quotes
+		        matchList.add(regexMatcher.group(2));
+		    } else {
+		        // Add unquoted word
+		        matchList.add(regexMatcher.group());
+		    }
+		}
+		return matchList.toArray(String[]::new);
+	}
+	
 	public static OutPacket[] parse(String command) {
-		String[] parts = command.split("\\s");
+		String[] parts = getParts(command);
 		return switch(parts[0]) {
 		case "tp" -> {
 			if(parts.length != 4)
@@ -119,9 +145,9 @@ public class Main {
 				throw new ParseException(e);
 			}
 		}
-		case "page" -> {
+		case "select" -> {
 			if(parts.length != 2)
-				throw new ParseException("1 argument has to be supplied. Usage: page <index>");
+				throw new ParseException("1 argument has to be supplied. Usage: select <index>");
 			
 			try {
 				yield new OutPacket[]{new ChangePage(Byte.parseByte(parts[1]))};
@@ -129,15 +155,75 @@ public class Main {
 				throw new ParseException(e);
 			}
 		}
+		case "up" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: up");
+			
+			try {
+				yield new OutPacket[]{UINavigation.d_up};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
+		case "down" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: down");
+			
+			try {
+				yield new OutPacket[]{UINavigation.d_down};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
+		case "left" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: left");
+			
+			try {
+				yield new OutPacket[]{UINavigation.d_left};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
+		case "right" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: right");
+			
+			try {
+				yield new OutPacket[]{UINavigation.d_right};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
+		case "start" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: start");
+			
+			try {
+				yield new OutPacket[]{new PlayerScriptState((byte) 1)};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
+		case "stop" -> {
+			if(parts.length != 1)
+				throw new ParseException("0 arguments has to be supplied. Usage: stop");
+			
+			try {
+				yield new OutPacket[]{new PlayerScriptState((byte) 0)};
+			} catch (NumberFormatException e) {
+				throw new ParseException(e);
+			}
+		}
 		case "help" -> {
-			System.out.println("available commands: tp, go, script, page");
+			System.out.println("available commands: tp, go, script, select, up, down, left, right, start, stop, help");
 			yield null;
 		}
 		case "exit", "quit" -> {
 			System.exit(0);
 			yield null;
 		}
-		default -> throw new ParseException("Unknown command type: "+parts[0]);
+		default -> throw new ParseException(parts[0]);//FIXME throw new ParseException("Unknown command type: "+parts[0]);
 		};
 	}
 
