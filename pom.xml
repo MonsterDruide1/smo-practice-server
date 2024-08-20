@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SMO-Practice-Server</groupId>
 	<artifactId>SMO-Practice-Server</artifactId>
-	<version>v1.1.0</version>
+	<version>v1.1.1</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
